@@ -53,7 +53,14 @@ CARGOS_VALIDOS = CARGOS_POR_TIPO_ELEICAO[TIPO_ELEICAO_ANO]
 
 
 def baixar_zip(url: str) -> zipfile.ZipFile:
-    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept": "*/*",
+        "Accept-Language": "pt-BR,pt;q=0.9",
+        "Referer": "https://dadosabertos.tse.jus.br/",
+    }
+    req = Request(url, headers=headers)
     with urlopen(req) as resp:
         buf = io.BytesIO(resp.read())
     return zipfile.ZipFile(buf)
