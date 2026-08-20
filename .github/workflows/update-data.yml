@@ -1,0 +1,27 @@
+name: Atualizar dados do TSE
+
+on:
+  schedule:
+    - cron: "0 6,11,16,21 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rodar ETL
+        run: python etl/build_data.py
+
+      - name: Commitar dados atualizados
+        run: |
+          git config user.name "rachei-o-voto-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "chore: atualiza dados do TSE"
+          git push
